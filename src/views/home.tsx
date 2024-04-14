@@ -42,8 +42,20 @@ const Home = (props) => {
     const slider = element.querySelector(`.radio-focus`);
     slider.style.width = actWidth;
     slider.style.left = actPos;
-    console.log(activeEl);
   }, [selectedType]);
+
+  React.useEffect(() => {
+    //@ts-ignore
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "get-all",
+          colors: hues.uihues,
+        },
+      },
+      "*"
+    );
+  }, [hues]);
 
   return (
     <Main>

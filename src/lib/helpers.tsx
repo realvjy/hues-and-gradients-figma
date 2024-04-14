@@ -1,5 +1,7 @@
 // 18 Nov, 2022
 
+import { getHextoRGB } from "./hues-gradients";
+
 export const handleDownloadPNG = (imgRef, canvasRef) => {
   const canvasS = canvasRef.current;
 };
@@ -141,4 +143,34 @@ export const calculateAspectRatioFit = (
   var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
 
   return { width: srcWidth * ratio, height: srcHeight * ratio, ratio: ratio };
+};
+
+export const createHue = (hexCode, colorName) => {
+  const frame = figma.createFrame();
+
+  const newColor = figma.util.rgba(getHextoRGB(hexCode)); // RGBA values: R=255, G=0, B=255, A=0.5
+  const updatedFill = figma.util.solidPaint(newColor);
+  frame.fills = [updatedFill];
+
+  frame.name = hexCode;
+
+  // Create text elements
+  const textNode1 = figma.createText();
+  textNode1.characters = hexCode;
+  const textNode2 = figma.createText();
+  textNode2.characters = colorName;
+
+  // Add text elements to the frame
+  frame.appendChild(textNode1);
+  frame.appendChild(textNode2);
+
+  // Apply Auto Layout to the frame
+  frame.layoutMode = "VERTICAL";
+  frame.primaryAxisAlignItems = "CENTER";
+
+  // Add some spacing between text elements (optional)
+  frame.paddingTop = 4;
+  frame.paddingBottom = 4;
+
+  return frame;
 };
