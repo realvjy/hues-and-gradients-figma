@@ -88,7 +88,7 @@ export function invCol(hex: string) {
   var r = parseInt(hex.slice(0, 2), 16),
     g = parseInt(hex.slice(2, 4), 16),
     b = parseInt(hex.slice(4, 6), 16);
-  return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#FFFFFF";
+  return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#0d0d0d" : "#f1f1f1";
 }
 
 // Return color set of 4

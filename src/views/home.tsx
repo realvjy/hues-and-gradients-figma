@@ -1,118 +1,304 @@
 // home.tsx
-// 15-Nov-2022
+// 13 Apr-2024
+// realvjy
 
 import * as React from "react";
 import styled from "styled-components";
-import { getColorData, invCol } from "../lib/hues-gradients";
+import Hues from "../components/hues";
+import Gradients from "../components/gradients";
+import { getColorData, getHextoRGB, invCol, rand } from "../lib/hues-gradients";
+import { CrossIcon, DotIcon, ShuffleIcon } from "../components/icons";
 
 const rgbToRgba = (rgb, a = 1) =>
   rgb.replace("rgb(", "rgba(").replace(")", `, ${a})`);
 
 const Home = (props) => {
-  const canvasRef = React.useRef(null);
+  const tglRef = React.useRef(null);
+  const [isAbout, setIsAbout] = React.useState(false);
   const [hues, setHues] = React.useState(getColorData());
-  var hue_1 = hues.uihues[0].color;
-  var hue_2 = hues.uihues[1].color;
-  var hue_3 = hues.uihues[2].color;
-  var hue_4 = hues.uihues[3].color;
+  const [selectedType, setSelectedType] = React.useState<"hues" | "gradients">(
+    "hues"
+  );
 
-  function getNewData() {
-    setHues(getColorData());
+  const [labelWidth, setLabelWidth] = React.useState<number>(0);
+
+  function toggleAbout() {
+    setIsAbout(!isAbout);
   }
 
-  return (
-    <Wrapper>
-      <ColorWrap>
-        <Colors>
-          <ColorBox style={{ background: hue_1 }}>
-            <Text className="hexcode" style={{ color: invCol(hue_1) }}>
-              {hue_1}
-            </Text>
-            <Text className="name">{hues.uihues[0].name}</Text>
-          </ColorBox>
-          <ColorBox style={{ background: hue_2 }}>
-            <Text className="hexcode" style={{ color: invCol(hue_2) }}>
-              {hue_2}
-            </Text>
-            <Text className="name">{hues.uihues[1].name}</Text>
-          </ColorBox>
-          <ColorBox style={{ background: hue_3 }}>
-            <Text className="hexcode" style={{ color: invCol(hue_3) }}>
-              {hue_3}
-            </Text>
-            <Text className="name">{hues.uihues[2].name}</Text>
-          </ColorBox>
-          <ColorBox style={{ background: hue_4 }}>
-            <Text className="hexcode" style={{ color: invCol(hue_4) }}>
-              {hue_4}
-            </Text>
-            <Text
-              className="name"
-              style={{
-                color: invCol(hue_4),
-              }}
-            >
-              {hues.uihues[3].name}
-            </Text>
-          </ColorBox>
-        </Colors>
-      </ColorWrap>
+  function generateNewColor() {
+    setHues(getColorData);
+  }
 
-      <Actions>
-        <ToggleWrap></ToggleWrap>
-        <GenerateWrap>
-          <Generate onClick={getNewData}>Generate</Generate>
-        </GenerateWrap>
-      </Actions>
-    </Wrapper>
+  const handleTypeChange = (type: "hues" | "gradients") => {
+    setSelectedType(type);
+  };
+
+  React.useEffect(() => {
+    const element = tglRef.current;
+    const activeEl = element.querySelector(`.${selectedType}`);
+    const actWidth = activeEl.offsetWidth + "px";
+    const actPos = activeEl.offsetLeft + "px";
+    const slider = element.querySelector(`.radio-focus`);
+    slider.style.width = actWidth;
+    slider.style.left = actPos;
+    console.log(activeEl);
+  }, [selectedType]);
+
+  return (
+    <Main>
+      {isAbout && (
+        <AboutWrap>
+          <About>
+            <div className="about">
+              <h3>About</h3>
+              <p>
+                Lil plugin generate hues and gradients using Color-scheme.js &
+                Ntc package. Made by{" "}
+                <a href="https://vjy.me" target="_blank">
+                  @realvjy
+                </a>
+              </p>
+            </div>
+            <div className="support">
+              <h3>Support & Help</h3>
+              <a href="https://www.buymeacoffee.com/realvjy" target="_blank">
+                Buy me a coffee
+              </a>
+              <a href="https://x.com/realvjy" target="_blank">
+                Follow on twitter/x
+              </a>
+            </div>
+            <Close>
+              <CrossIcon onClick={toggleAbout} />
+            </Close>
+          </About>
+        </AboutWrap>
+      )}
+      <Wrapper>
+        {selectedType == "gradients" ? (
+          <Gradients hues={hues} />
+        ) : (
+          <Hues hues={hues} />
+        )}
+        <Actions>
+          <LeftMenu>
+            <ToggleWrap ref={tglRef}>
+              <input
+                id="hue"
+                type="radio"
+                name="hues"
+                checked={selectedType === "hues"}
+                onChange={() => handleTypeChange("hues")}
+              />
+              <label
+                className={`hues ${selectedType === "hues" ? "active" : ""}`}
+                htmlFor="hue"
+                onClick={() => handleTypeChange("hues")}
+              >
+                Hues
+              </label>
+              <input
+                id="gradient"
+                type="radio"
+                name="shader-editor-type"
+                checked={selectedType === "gradients"}
+                onChange={() => handleTypeChange("gradients")}
+              />
+              <label
+                className={`gradients ${
+                  selectedType === "gradients" ? "active" : ""
+                }`}
+                htmlFor="gradient"
+                onClick={() => handleTypeChange("gradients")}
+              >
+                Gradients
+              </label>
+              <div className="radio-focus"></div>
+            </ToggleWrap>
+            <Menu>
+              <DotIcon onClick={toggleAbout} />
+            </Menu>
+          </LeftMenu>
+          <GenerateWrap>
+            <Insert>Insert (WIP)</Insert>
+            <Generate onClick={generateNewColor}>
+              Generate <ShuffleIcon />
+            </Generate>
+          </GenerateWrap>
+        </Actions>
+      </Wrapper>
+    </Main>
   );
 };
 export default Home;
 
+const Main = styled.div`
+  position: relative;
+`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4px;
+  gap: 4px;
 `;
 
-const ColorWrap = styled.div`
+const Actions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ToggleWrap = styled.div`
   position: relative;
-  display: flex;
-`;
-const Colors = styled.div`
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(4, 1fr);
-  height: 80px;
-  overflow: hidden;
-  border-radius: 10px;
-`;
-
-const Text = styled.div`
-  &.name {
-    font-size: 10px;
-    mix-blend-mode: overlay;
-    opacity: 0.9;
+  background: var(--toggle-bg);
+  box-shadow: var(--toggle-bg-in);
+  border-radius: 6px;
+  [type="radio"] {
+    display: none;
+    position: relative;
   }
-  &.hexcode {
-    font-size: 14px;
+
+  label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    padding: 4px 10px;
+    font-size: 11px;
     font-weight: 500;
-    opacity: 0.7;
+    line-height: 16px;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0.6;
+    &:hover {
+      opacity: 0.8;
+    }
+    &.active {
+      font-weight: 600;
+      opacity: 1;
+    }
+  }
+
+  .radio-focus {
+    position: absolute;
+    border-radius: 6px;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    font-size: 11px;
+    width: var(--radio-focus-width);
+    transition: all ease 300ms;
+    background: var(--toggle-btn-bg);
+    box-shadow: var(--toggle-btn-shadow);
+    border-radius: 6px;
   }
 `;
 
-const ColorBox = styled.div`
+const LeftMenu = styled.div`
   display: flex;
-  height: 100%;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 10px;
+  flex-direction: row;
+  gap: 8px;
 `;
 
-const Actions = styled.div``;
+const GenerateWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+`;
 
-const ToggleWrap = styled.div``;
+const ButtonBase = styled.button`
+  appearance: none;
+  border: 0;
+  box-shadow: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 4px 8px;
+  line-height: 16px;
+  display: flex;
+  white-space: nowrap;
+  text-align: center;
+  user-select: none;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+  min-height: 28px;
+  border-radius: 6px;
+`;
+const Generate = styled(ButtonBase)`
+  color: var(--figma-color-text-onbrand);
+  background-color: var(--figma-color-bg-brand);
+  box-shadow: var(--toggle-btn-shadow);
+`;
 
-const GenerateWrap = styled.div``;
+const Insert = styled(ButtonBase)`
+  color: var(--figma-color-text);
+  background: var(--toggle-btn-bg);
+  box-shadow: var(--toggle-btn-shadow);
+`;
 
-const Generate = styled.button``;
+const Toggle = styled.button``;
+
+const Menu = styled.div``;
+
+const AboutWrap = styled.div`
+  position: absolute;
+  z-index: 999;
+  background: var(--about-bg);
+  backdrop-filter: blur(12px);
+  width: 100%;
+  height: 100%;
+`;
+
+const About = styled.div`
+  background: var(--figma-color-bg);
+  display: flex;
+  width: calc(100% - 24px);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  margin: 12px;
+  height: calc(100% - 24px);
+  position: absolute;
+  border-radius: 6px;
+  .about {
+    width: 55%;
+    padding: 8px 12px;
+  }
+  .support {
+    padding: 8px 12px;
+    a {
+      color: var(--figma-color-text-brand);
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+  }
+  h3 {
+    font-size: 13px;
+    margin: 4px 0;
+  }
+
+  p {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    margin: 4px 0;
+    opacity: 0.8;
+    color: var(--figma-color-text);
+    a {
+      color: var(--figma-color-text-brand);
+    }
+  }
+`;
+
+const Close = styled.div`
+  padding: 6px !important;
+  position: absolute;
+  z-index: 1;
+  right: 2px;
+  top: 2px;
+  opacity: 0.7;
+  color: var(--figma-color-text);
+`;
