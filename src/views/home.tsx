@@ -19,7 +19,8 @@ const Home = (props) => {
   const [selectedType, setSelectedType] = React.useState<"hues" | "gradients">(
     "hues"
   );
-
+  var grad_hue_1 = hues.uihues[0].color;
+  var grad_hue_2 = hues.uihues[rand(3) + 1].color;
   const [labelWidth, setLabelWidth] = React.useState<number>(0);
 
   function toggleAbout() {
@@ -34,6 +35,33 @@ const Home = (props) => {
     setSelectedType(type);
   };
 
+  const addToFigma = () => {
+    if (selectedType == "gradients") {
+      parent.postMessage(
+        {
+          pluginMessage: {
+            type: "gradients",
+            color_1: grad_hue_1,
+            color_2: grad_hue_2,
+          },
+        },
+        "*"
+      );
+    } else {
+      parent.postMessage(
+        {
+          pluginMessage: {
+            type: "hues",
+            colors: hues.uihues,
+          },
+        },
+        "*"
+      );
+    }
+  };
+
+  React.useEffect(() => {}, [hues]);
+
   React.useEffect(() => {
     const element = tglRef.current;
     const activeEl = element.querySelector(`.${selectedType}`);
@@ -43,19 +71,6 @@ const Home = (props) => {
     slider.style.width = actWidth;
     slider.style.left = actPos;
   }, [selectedType]);
-
-  React.useEffect(() => {
-    //@ts-ignore
-    parent.postMessage(
-      {
-        pluginMessage: {
-          type: "get-all",
-          colors: hues.uihues,
-        },
-      },
-      "*"
-    );
-  }, [hues]);
 
   return (
     <Main>
@@ -89,7 +104,7 @@ const Home = (props) => {
       )}
       <Wrapper>
         {selectedType == "gradients" ? (
-          <Gradients hues={hues} />
+          <Gradients hue_1={grad_hue_1} hue_2={grad_hue_2} />
         ) : (
           <Hues hues={hues} />
         )}
@@ -133,7 +148,7 @@ const Home = (props) => {
             </Menu>
           </LeftMenu>
           <GenerateWrap>
-            <Insert>Insert (WIP)</Insert>
+            <Insert onClick={addToFigma}>Insert </Insert>
             <Generate onClick={generateNewColor}>
               Generate <ShuffleIcon />
             </Generate>

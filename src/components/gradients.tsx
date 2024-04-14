@@ -6,16 +6,10 @@ import styled from "styled-components";
 import { getColorData, getHextoRGB, invCol, rand } from "../lib/hues-gradients";
 
 const Gradients = (props) => {
-  const hues = props.hues;
-  var hue_1 = hues.uihues[0].color;
-  var hue_2 = hues.uihues[1].color;
-  var hue_3 = hues.uihues[2].color;
-  var hue_4 = hues.uihues[3].color;
-
   // Generating 2 Gradient color hex for more randomization fixed first value at 0
   // Second value is from hue_2,3 or 4
-  var grad_hue_1 = hues.uihues[0].color;
-  var grad_hue_2 = hues.uihues[rand(3) + 1].color;
+  var grad_hue_1 = props.hue_1;
+  var grad_hue_2 = props.hue_2;
   var grad_1 = getHextoRGB(grad_hue_1);
   var grad_2 = getHextoRGB(grad_hue_2);
 

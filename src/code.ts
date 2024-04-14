@@ -1,4 +1,4 @@
-import { createHue } from "./lib/helpers";
+import { createGradient, createHue, s4 } from "./lib/helpers";
 import { getHextoRGB } from "./lib/hues-gradients";
 
 // Show the plugin UI
@@ -13,28 +13,32 @@ console.log("Plugin running running...");
 //  Message received
 figma.ui.onmessage = async (msg) => {
   let node = figma.currentPage.selection[0];
-  let hues = msg.colors;
-  console.log(hues[0], "some node here");
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  const hueFrame = figma.createFrame();
 
-  if (!node) {
-    await figma.loadFontAsync({ family: "Inter", style: "Regular" });
-    // createHue(hues[0].color, hues[0].name);
-    // for (let i = 0; i < hues.length; i++) {
-    //   createHue(hues[i].color, hues[i].name);
-    // }
-
-    const hueFrame = figma.createFrame();
-
+  if (msg.type == "hues") {
+    let hues = msg.colors;
     for (let i = 0; i < hues.length; i++) {
       hueFrame.appendChild(createHue(hues[i].color, hues[i].name));
     }
-
-    // Apply Auto Layout to the frame
-    hueFrame.layoutMode = "HORIZONTAL";
-    hueFrame.primaryAxisAlignItems = "CENTER";
-    // Select the newly created frame
-    // figma.currentPage.selection = [frame];
+    hueFrame.name = "hues-" + s4();
+  } else {
+    hueFrame.appendChild(
+      createGradient({ hue_1: msg.color_1, hue_2: msg.color_2 })
+    );
+    hueFrame.name = "gradients-" + s4();
   }
+
+  // Apply Auto Layout to the frame
+  hueFrame.layoutMode = "HORIZONTAL";
+  hueFrame.primaryAxisAlignItems = "CENTER";
+  hueFrame.layoutSizingVertical = "HUG";
+  hueFrame.layoutSizingHorizontal = "HUG";
+
+  hueFrame.x = Math.round(figma.viewport.center.x - hueFrame.width / 2);
+  hueFrame.y = Math.round(figma.viewport.center.y - hueFrame.height / 2);
+  // Select the newly created frame
+  figma.currentPage.selection = [hueFrame];
 
   figma.notify("✅ gradient added");
 

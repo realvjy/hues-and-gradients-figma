@@ -1,6 +1,6 @@
 // 18 Nov, 2022
 
-import { getHextoRGB } from "./hues-gradients";
+import { getHextoRGB, invCol } from "./hues-gradients";
 
 export const handleDownloadPNG = (imgRef, canvasRef) => {
   const canvasS = canvasRef.current;
@@ -147,18 +147,25 @@ export const calculateAspectRatioFit = (
 
 export const createHue = (hexCode, colorName) => {
   const frame = figma.createFrame();
-
-  const newColor = figma.util.rgba(getHextoRGB(hexCode)); // RGBA values: R=255, G=0, B=255, A=0.5
-  const updatedFill = figma.util.solidPaint(newColor);
-  frame.fills = [updatedFill];
+  const figmaFill = updateSolidFill(hexCode);
+  const figmaInvFill = updateSolidFill(invCol(hexCode));
+  frame.fills = [figmaFill];
 
   frame.name = hexCode;
 
   // Create text elements
   const textNode1 = figma.createText();
   textNode1.characters = hexCode;
+  textNode1.fontSize = 12;
+  textNode1.fills = [figmaInvFill];
+  textNode1.opacity = 0.8;
+
   const textNode2 = figma.createText();
   textNode2.characters = colorName;
+  textNode2.fontSize = 10;
+  textNode2.fills = [figmaInvFill];
+  textNode2.opacity = 0.8;
+  textNode2.blendMode = "OVERLAY";
 
   // Add text elements to the frame
   frame.appendChild(textNode1);
@@ -167,10 +174,77 @@ export const createHue = (hexCode, colorName) => {
   // Apply Auto Layout to the frame
   frame.layoutMode = "VERTICAL";
   frame.primaryAxisAlignItems = "CENTER";
+  frame.layoutSizingVertical = "FIXED";
+  frame.resize(115, 80);
 
   // Add some spacing between text elements (optional)
   frame.paddingTop = 4;
   frame.paddingBottom = 4;
+  frame.paddingLeft = 8;
 
   return frame;
+};
+
+export const createGradient = (hexCodes) => {
+  const frame = figma.createFrame();
+  frame.name = "gradient";
+  frame.fills = [
+    {
+      type: "GRADIENT_LINEAR",
+      gradientTransform: [
+        [1, 0, 0],
+        [0, 1, 0.5],
+      ],
+      gradientStops: [
+        { position: 0, color: getHextoRGB(hexCodes.hue_1) },
+        { position: 1, color: getHextoRGB(hexCodes.hue_2) },
+      ],
+    },
+  ];
+
+  // Create text elements
+  const textNode1 = figma.createText();
+  textNode1.characters = hexCodes.hue_1;
+  textNode1.fontSize = 12;
+  textNode1.fills = [updateSolidFill(invCol(hexCodes.hue_1))];
+  textNode1.opacity = 0.8;
+
+  // Create text elements
+  const textNode2 = figma.createText();
+  textNode2.characters = hexCodes.hue_2;
+  textNode2.fontSize = 12;
+  textNode2.fills = [updateSolidFill(invCol(hexCodes.hue_2))];
+  textNode2.opacity = 0.8;
+
+  // Add text elements to the frame
+  frame.appendChild(textNode1);
+  frame.appendChild(textNode2);
+
+  // Apply Auto Layout to the frame
+  frame.layoutMode = "HORIZONTAL";
+  frame.primaryAxisAlignItems = "CENTER";
+  frame.layoutSizingVertical = "FIXED";
+  frame.primaryAxisAlignItems = "SPACE_BETWEEN";
+  frame.counterAxisAlignItems = "MAX";
+  frame.resize(460, 80);
+
+  // Add some spacing between text elements (optional)
+  frame.paddingBottom = 16;
+  frame.paddingLeft = 16;
+  frame.paddingRight = 16;
+
+  return frame;
+};
+
+// random no generator
+export const s4 = () => {
+  return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+};
+
+export const updateSolidFill = (hexCode) => {
+  const newColor = figma.util.rgba(getHextoRGB(hexCode)); // RGBA values: R=255, G=0, B=255, A=0.5
+  const updatedFill = figma.util.solidPaint(newColor);
+  return updatedFill;
 };
