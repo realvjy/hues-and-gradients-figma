@@ -14,6 +14,7 @@
   --toggle-btn-bg: linear-gradient(180deg, #ffffff 0%, #f6f6f6 100%);
   --toggle-btn-shadow: 0px 0.75px 0.5px rgba(0, 0, 0, 0.13), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.15);
   --about-bg: rgba(255, 255, 255, 0.5);
+  --btn-shadow: 0px 3px 6px -3px rgba(0, 0, 0, .1), 0px 0px 0px .5px rgba(0, 0, 0, .025), 0px .75px .75px rgba(0, 0, 0, .1), inset 0px 1px .5px rgba(255, 255, 255, .15);
 }
 
 .figma-dark body {
@@ -24,11 +25,12 @@
   --primary-button-bg: #fff;
   --primary-button-text-color: #000;
   --node-bg: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMTciIHZpZXdCb3g9IjAgMCAyMiAxNyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTcuNSA2LjI1SDEwLjc1VjE2Ljc1SDAuMjVWNi4yNUgzLjVIMy42MjAxNkwzLjY5NTIyIDYuMTU2MTdMNS41IDMuOTAwMkw3LjMwNDc4IDYuMTU2MTdMNy4zNzk4NCA2LjI1SDcuNVoiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iMC41Ii8+CjxwYXRoIGQ9Ik0xOC41IDYuMjVIMjEuNzVWMTYuNzVIMTEuMjVWNi4yNUgxNC41SDE0LjYyMDJMMTQuNjk1MiA2LjE1NjE3TDE2LjUgMy45MDAyTDE4LjMwNDggNi4xNTYxN0wxOC4zNzk4IDYuMjVIMTguNVoiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMC41Ii8+CjxyZWN0IHg9IjEyLjkiIHk9IjcuOSIgd2lkdGg9IjcuMiIgaGVpZ2h0PSI3LjIiIHN0cm9rZT0iIzk2OTY5NiIgc3Ryb2tlLW9wYWNpdHk9IjAuNDIiIHN0cm9rZS13aWR0aD0iMC4yIi8+CjxyZWN0IHg9IjEuOSIgeT0iNy45IiB3aWR0aD0iNy4yIiBoZWlnaHQ9IjcuMiIgc3Ryb2tlPSIjOTY5Njk2IiBzdHJva2Utb3BhY2l0eT0iMC40MiIgc3Ryb2tlLXdpZHRoPSIwLjIiLz4KPC9zdmc+Cg==) right center;
-  --toggle-bg: #4a4a4a;
-  --toggle-bg-in:  inset 0px 0px 0.5px 1px rgba(0, 0, 0, 0.6);
-  --toggle-btn-bg: linear-gradient(180deg, #414141 0%, #1E1E1E 100%);
-  --toggle-btn-shadow: 0px 0.75px 0.5px rgba(0, 0, 0, 0.8), 0px 0px 0px 0.5px rgba(255, 255, 255, 0.15);
+  --toggle-bg: #202020;
+  --toggle-bg-in:  inset 0px 0px 0px .5px rgba(0, 0, 0, .2), inset 0px .5px 1px rgba(0, 0, 0, .2), 0px .75px .5px rgba(255, 255, 255, .05);
+  --toggle-btn-bg: linear-gradient(180deg, #323232 0%, #3f3f3f 100%);
+  --toggle-btn-shadow: 0px 3px 6px -3px rgba(0, 0, 0, .15), 0px 0px 0px .5px rgba(0, 0, 0, .2), 0px .75px .75px rgba(0, 0, 0, .2), inset 0px 1px 1px rgba(255, 255, 255, .15);
   --about-bg: rgba(0, 0, 0, 0.4);
+  --btn-shadow: 0px 3px 6px -3px rgba(0, 0, 0, .1), 0px 0px 0px .5px rgba(0, 0, 0, .025), 0px .75px .75px rgba(0, 0, 0, .1), inset 0px 1px .5px rgba(255, 255, 255, .15);
 }
 
 * {

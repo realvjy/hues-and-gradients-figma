@@ -1,7 +1,7 @@
 {
-    "name": "project-wrap-figma",
+    "name": "hues-and-gradients",
     "version": "1.0.0",
-    "description": "Wrap Shapes",
+    "description": "Generate cool hues and gradients",
     "main": "code.js",
     "author": "realvjy",
     "license": "MIT",
@@ -49,15 +49,15 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack --mode=production",
+        "build": "webpack --mode=production ",
         "watch": "webpack --mode=development --watch"
     },
     "figma-plugin": {
         "editorType": [
             "figma"
         ],
-        "id": "wrap",
-        "name": "wrap",
+        "id": "huesandgradients",
+        "name": "huesandgradients",
         "main": "src/main.ts"
     }
 }

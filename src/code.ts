@@ -10,12 +10,22 @@ figma.showUI(__html__, {
 
 console.log("Plugin running running...");
 
+let pos = { x: 0, y: 0 };
+let cardHeight = 80;
+let gap = 20;
 //  Message received
 figma.ui.onmessage = async (msg) => {
   let node = figma.currentPage.selection[0];
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
   const hueFrame = figma.createFrame();
-
+  let y =
+    Math.round(figma.viewport.center.y - hueFrame.height / 2 - 200) +
+    pos.y * (cardHeight + gap);
+  let x = Math.round(figma.viewport.center.x - hueFrame.width / 2);
+  if (node) {
+    y = node.y + node.height + gap;
+    x = node.x;
+  }
   if (msg.type == "hues") {
     let hues = msg.colors;
     for (let i = 0; i < hues.length; i++) {
@@ -35,12 +45,13 @@ figma.ui.onmessage = async (msg) => {
   hueFrame.layoutSizingVertical = "HUG";
   hueFrame.layoutSizingHorizontal = "HUG";
 
-  hueFrame.x = Math.round(figma.viewport.center.x - hueFrame.width / 2);
-  hueFrame.y = Math.round(figma.viewport.center.y - hueFrame.height / 2);
+  hueFrame.x = x;
+  hueFrame.y = y;
+  pos.y = pos.y + 1;
   // Select the newly created frame
   figma.currentPage.selection = [hueFrame];
 
-  figma.notify("✅ gradient added");
+  figma.notify("✅ " + msg.type + " added");
 
   return;
 };

@@ -1,6 +1,6 @@
 {
   "name": "Hues & Gradients",
-  "id": "1308204019053243201",
+  "id": "1361736324008749685",
   "api": "1.0.0",
   "main": "dist/code.js",
   "ui": "dist/ui.html",
@@ -14,5 +14,6 @@
     "allowedDomains": [
       "none"
     ]
-  }
+  },
+  "documentAccess": "dynamic-page"
 }

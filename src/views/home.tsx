@@ -258,18 +258,38 @@ const ButtonBase = styled.button`
 const Generate = styled(ButtonBase)`
   color: var(--figma-color-text-onbrand);
   background-color: var(--figma-color-bg-brand);
-  box-shadow: var(--toggle-btn-shadow);
+  box-shadow: var(--btn-shadow);
+  &:hover {
+    opacity: 0.8;
+  }
+  &:active,
+  &:focus {
+    box-shadow: var(--btn-shadow);
+  }
 `;
 
 const Insert = styled(ButtonBase)`
   color: var(--figma-color-text);
   background: var(--toggle-btn-bg);
   box-shadow: var(--toggle-btn-shadow);
+  &:hover {
+    opacity: 0.7;
+  }
+  &:active,
+  &:focus {
+    box-shadow: var(--toggle-btn-shadow);
+  }
 `;
 
 const Toggle = styled.button``;
 
-const Menu = styled.div``;
+const Menu = styled.div`
+  border-radius: 6px;
+  &:hover {
+    background-color: var(--figma-color-bg);
+    box-shadow: var(--toggle-btn-shadow);
+  }
+`;
 
 const AboutWrap = styled.div`
   position: absolute;
@@ -328,4 +348,9 @@ const Close = styled.div`
   top: 2px;
   opacity: 0.7;
   color: var(--figma-color-text);
+  border-radius: 6px;
+  &:hover {
+    background-color: var(--figma-color-bg);
+    box-shadow: var(--toggle-btn-shadow);
+  }
 `;
